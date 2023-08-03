@@ -22,6 +22,7 @@ let currentIndex = 0;
 
 let start;
 let stop;
+let init = false;
 let time = Date.now();
 
 async function startIntonate() {
@@ -36,29 +37,29 @@ async function startIntonate() {
   }
 }
 
-let init = false;
-
 function displayNote(obj) {
   const elem = document.getElementById("note-value");
-  if (!obj.note) {
-    init = false;
-    elem.textContent = "Microphone is disabled";
-  } else if (obj.volume < THRESHOLD) {
-    if (!init) elem.textContent = "Too quiet";
-    else return;
-  } else {
+  const msgElem = document.getElementById("message");
+  if ((!obj.note || obj.volume < THRESHOLD) && !init) {
+    elem.textContent = "Too quiet...";
+    msgElem.textContent = "Is your microphone on?";
+  } else if (obj.volume > THRESHOLD) {
     init = true;
     elem.textContent = obj.note;
+    msgElem.textContent = "";
   }
 }
 
 function populateScales() {
   for (const type in scales) {
+    const group = document.createElement("optgroup");
+    group.label = type.charAt(0).toUpperCase() + type.slice(1);
+    dropdown.appendChild(group);
     for (const scale in scales[type]) {
-      let opt = document.createElement("option");
+      const opt = document.createElement("option");
       opt.textContent = `${scale} ${type}`;
       opt.value = `${type},${scale}`;
-      dropdown.appendChild(opt);
+      group.appendChild(opt);
     }
   }
 

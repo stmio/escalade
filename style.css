@@ -96,7 +96,14 @@ button:focus-visible {
   }
 }
 
-#scale {
+#scale,
+#message {
   margin: 20px;
   font-size: large;
+}
+
+#chooseScale {
+  border: orange 1px solid;
+  border-radius: 5px;
+  padding: 0.2em;
 }
