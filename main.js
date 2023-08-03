@@ -22,6 +22,7 @@ let currentIndex = 0;
 
 let start;
 let stop;
+let time = Date.now();
 
 async function startIntonate() {
   const { listen, subscribe, unsubscribe } = await intonate();
@@ -38,7 +39,6 @@ async function startIntonate() {
 let init = false;
 
 function displayNote(obj) {
-  console.log(obj);
   const elem = document.getElementById("note-value");
   if (!obj.note) {
     init = false;
@@ -77,6 +77,7 @@ function populateScales() {
     scaleElem.textContent = `Currently listening for ${j} ${i}, ${OCTAVES} octaves`;
 
     start(validateScale);
+    time = Date.now();
   });
 }
 
@@ -89,20 +90,33 @@ function validateScale(obj) {
   if (obj.volume < THRESHOLD || !obj.note) return;
 
   if (obj.note === currentScale[currentIndex]) {
+    // correct note
     currentIndex++;
     if (currentIndex === currentScale.length) endScale(true);
-
     console.log("next note: ", currentScale[currentIndex]);
-  } else if (obj.note !== currentScale[currentIndex - 1]) {
+  } else if (obj.note === currentScale[currentIndex - 1]) {
+    // still playing previous note, ignore but update timer
+    time = Date.now();
+  } else if ((Date.now() - time) / 1000 > 0.15) {
+    // has been playing a wrong note for more than 0.15s (approx.)
+    // (notes shorter than this are ignored due to background noise and
+    // small fluctuations in the frequency, especially for wind instruments)
+    console.log(
+      "Debug details for incorrect note:\n",
+      `Approx. note length: ${(Date.now() - time) / 1000}s\n`,
+      `Note volume: ${obj.volume}\n`,
+      `Note expected: ${currentScale[currentIndex]}\n`,
+      `Note observed: ${obj.note}`
+    );
     scaleElem.textContent = `The next note was ${currentScale[currentIndex]}, but you played ${obj.note}`;
     endScale(false);
   }
 }
 
 function endScale(wasCorrect) {
-  currentIndex = 0;
+  if (wasCorrect) scaleElem.textContent = "You played the scale correctly!";
   currentScale = [];
-  if (wasCorrect) scaleElem.textContent = "";
+  currentIndex = 0;
   dropdown.selectedIndex = 0;
   stop(validateScale);
   console.log("scale end");
