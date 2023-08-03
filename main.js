@@ -1,8 +1,6 @@
 import "./style.css";
 import { intonate } from "intonate";
 
-const { listen, subscribe, unsubscribe } = await intonate();
-
 const scales = {
   major: {
     C: ["C", "D", "E", "F", "G", "A", "B"],
@@ -22,14 +20,20 @@ const scaleElem = document.getElementById("scale");
 let currentScale = [];
 let currentIndex = 0;
 
-(async () => {
+let start;
+let stop;
+
+async function startIntonate() {
+  const { listen, subscribe, unsubscribe } = await intonate();
+  start = subscribe;
+  stop = unsubscribe;
   try {
     listen();
     subscribe(displayNote);
   } catch (error) {
     console.log(error);
   }
-})();
+}
 
 let init = false;
 
@@ -72,7 +76,7 @@ function populateScales() {
 
     scaleElem.textContent = `Currently listening for ${j} ${i}, ${OCTAVES} octaves`;
 
-    subscribe(validateScale);
+    start(validateScale);
   });
 }
 
@@ -100,8 +104,9 @@ function endScale(wasCorrect) {
   currentScale = [];
   if (wasCorrect) scaleElem.textContent = "";
   dropdown.selectedIndex = 0;
-  unsubscribe(validateScale);
+  stop(validateScale);
   console.log("scale end");
 }
 
 populateScales();
+startIntonate();
