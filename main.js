@@ -19,6 +19,7 @@ const scaleElem = document.getElementById("scale");
 
 let currentScale = [];
 let currentIndex = 0;
+let currentName = "";
 
 let start;
 let stop;
@@ -72,10 +73,11 @@ function populateScales() {
     const [i, j] = dropdown.value.split(",");
     const scale = scales[i][j];
 
+    currentName = `${j} ${i}`;
     currentScale = addOctaves(scale);
     console.log(currentScale);
 
-    scaleElem.textContent = `Currently listening for ${j} ${i}, ${OCTAVES} octaves`;
+    scaleElem.textContent = `Currently listening for ${currentName}, ${OCTAVES} octaves`;
 
     start(validateScale);
     time = Date.now();
@@ -88,9 +90,11 @@ function addOctaves(scale) {
 }
 
 function validateScale(obj) {
-  if (obj.volume < THRESHOLD || !obj.note) return;
-
-  if (obj.note === currentScale[currentIndex]) {
+  if (obj.volume < THRESHOLD || !obj.note) {
+    // note too quiet, likely background noise
+    time = Date.now();
+    return;
+  } else if (obj.note === currentScale[currentIndex]) {
     // correct note
     currentIndex++;
     if (currentIndex === currentScale.length) endScale(true);
@@ -115,12 +119,22 @@ function validateScale(obj) {
 }
 
 function endScale(wasCorrect) {
-  if (wasCorrect) scaleElem.textContent = "You played the scale correctly!";
   currentScale = [];
   currentIndex = 0;
   dropdown.selectedIndex = 0;
   stop(validateScale);
   console.log("scale end");
+
+  const data = JSON.parse(localStorage.getItem("scales")) || {};
+  if (!data[currentName]) data[currentName] = { correct: 0, incorrect: 0 };
+
+  if (wasCorrect) {
+    data[currentName].correct++;
+    scaleElem.textContent = "You played the scale correctly!";
+  } else {
+    data[currentName].incorrect++;
+  }
+  localStorage.setItem("scales", JSON.stringify(data));
 }
 
 populateScales();

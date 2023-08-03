@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>My Stats - Escalade</title>
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <div id="app">
+      <a href="./stats.html">Go Back</a>
+      <p>Press "Save Backup" to download your stats as a JSON file.</p>
+      <p>Press "Load Backup" to load stats from another computer.</p>
+      <p style="color: red">
+        Loading a backup will overwrite the data already on this computer!
+      </p>
+      <div style="display: flex; gap: 1em; justify-content: center">
+        <button id="save">Save Backup</button>
+        <button id="load">Load Backup</button>
+      </div>
+      <div
+        id="load-input"
+        style="
+          display: none;
+          margin: 2em;
+          border: 1px #555 solid;
+          padding: 10px;
+        "
+      >
+        <input type="file" id="file" />
+        <button id="submit-file">Submit</button>
+      </div>
+    </div>
+    <script>
+      document.getElementById("save").addEventListener("click", () => {
+        const file =
+          "data:text/json;charset=utf-8," +
+          JSON.stringify(JSON.parse(localStorage.getItem("scales")));
+
+        const data = encodeURI(file);
+        const link = document.createElement("a");
+        link.setAttribute("href", data);
+        link.setAttribute("download", "escalade-backup.json");
+        link.click();
+
+        window.history.back();
+      });
+      document.getElementById("load").addEventListener("click", () => {
+        document.getElementById("load-input").style.display = "block";
+      });
+      document.getElementById("submit-file").addEventListener("click", () => {
+        const file = document.getElementById("file").files[0];
+        console.log(file);
+        const reader = new FileReader();
+
+        reader.addEventListener("load", () => {
+          localStorage.setItem("scales", reader.result);
+        });
+        reader.readAsText(file);
+
+        window.history.back();
+      });
+    </script>
+  </body>
+</html>
