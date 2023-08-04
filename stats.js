@@ -20,10 +20,10 @@ function displayStats() {
     statElem.querySelector(".num-correct").textContent = numCorrect;
     statElem.querySelector(".num-incorrect").textContent = numIncorrect;
 
-    const width = (50 * numIncorrect) / (numCorrect + numIncorrect);
+    const width = (100 * numIncorrect) / (numCorrect + numIncorrect);
 
-    if (width === Infinity) statElem.querySelector(".bar").style.width = "50vw";
-    else statElem.querySelector(".bar").style.width = `${width}vw`;
+    if (width === Infinity) statElem.querySelector(".bar").style.width = "100%";
+    else statElem.querySelector(".bar").style.width = `${width}%`;
   }
 }
 

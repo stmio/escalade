@@ -42,8 +42,6 @@
         link.setAttribute("href", data);
         link.setAttribute("download", "escalade-backup.json");
         link.click();
-
-        window.history.back();
       });
       document.getElementById("load").addEventListener("click", () => {
         document.getElementById("load-input").style.display = "block";
@@ -55,10 +53,9 @@
 
         reader.addEventListener("load", () => {
           localStorage.setItem("scales", reader.result);
+          window.history.back();
         });
         reader.readAsText(file);
-
-        window.history.back();
       });
     </script>
   </body>
