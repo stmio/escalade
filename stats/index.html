@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>My Stats - Escalade</title>
+    <link rel="stylesheet" href="../css/style.css" />
+    <link rel="stylesheet" href="../css/stats.css" />
+    <script src="./stats.js" type="module"></script>
+  </head>
+  <body>
+    <div id="app">
+      <a href="../" class="link">&leftarrow; Go Back</a>
+      <h2>My Stats</h2>
+      <div class="options">
+        <button id="backup-btn">Backup management</button>
+        <button id="reset-btn">Reset your stats</button>
+      </div>
+      <div id="menu">
+        <div id="reset">
+          <p>Are you sure you want to reset your stats?</p>
+          <p class="warn">This action can not be reversed.</p>
+          <div class="options">
+            <button id="reset-stats">Yes</button>
+            <button class="cancel">No</button>
+          </div>
+        </div>
+        <div id="backup">
+          <p>Press "Save Backup" to download your stats as a JSON file.</p>
+          <p>Press "Load Backup" to load stats from another computer.</p>
+          <p class="warn">
+            Loading a backup will overwrite the data already on this computer!
+          </p>
+          <div class="options">
+            <button id="save-bk">Save Backup</button>
+            <button id="load-bk">Load Backup</button>
+            <button class="cancel">Cancel</button>
+          </div>
+          <div id="load-input">
+            <input type="file" id="file" />
+            <button id="submit-file">Submit</button>
+          </div>
+        </div>
+      </div>
+      <div class="stat">
+        <div>
+          <div class="num-correct">4</div>
+          <div class="scale-name">C major</div>
+          <div class="num-incorrect">2</div>
+        </div>
+        <div class="percentage">
+          <div class="bar"></div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

@@ -1,4 +1,3 @@
-import "./style.css";
 import { intonate } from "intonate";
 
 const scales = {
@@ -90,11 +89,8 @@ function addOctaves(scale) {
 }
 
 function validateScale(obj) {
-  if (obj.volume < THRESHOLD || !obj.note) {
-    // note too quiet, likely background noise
-    time = Date.now();
-    return;
-  } else if (obj.note === currentScale[currentIndex]) {
+  if (obj.volume < THRESHOLD || !obj.note) return;
+  else if (obj.note === currentScale[currentIndex]) {
     // correct note
     currentIndex++;
     if (currentIndex === currentScale.length) endScale(true);

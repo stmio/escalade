@@ -29,6 +29,7 @@ body {
   place-items: center;
   min-width: 320px;
   min-height: 100vh;
+  overflow: hidden;
 }
 
 h1 {
@@ -37,6 +38,7 @@ h1 {
 }
 
 #app {
+  min-width: 50vw;
   max-width: 1280px;
   margin: 0 auto;
   padding: 2rem;
@@ -106,4 +108,8 @@ button:focus-visible {
   border: orange 1px solid;
   border-radius: 5px;
   padding: 0.2em;
+}
+
+.link:hover {
+  text-decoration: underline;
 }

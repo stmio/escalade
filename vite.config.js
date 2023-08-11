@@ -7,9 +7,7 @@ export default defineConfig({
     rollupOptions: {
       input: {
         main: resolve(__dirname, "index.html"),
-        stats: resolve(__dirname, "stats.html"),
-        backup: resolve(__dirname, "backup.html"),
-        reset: resolve(__dirname, "reset.html"),
+        stats: resolve(__dirname, "./stats/index.html"),
       },
     },
   },
